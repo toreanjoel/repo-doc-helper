@@ -8,3 +8,11 @@ Starting the application:
   * Run `mix setup` to install and setup dependencies
   * Copy `.envrc-example` and rename to `.envrc`, fill in relevant env variables
   * Start Phoenix endpoint with `source .envrc && mix phx.server` or inside IEx with `iex -S mix phx.server`
+
+## Dependencies
+
+- Python (atleast 3.9): You will need to install python as the system will run commands against the python from shell scripts. 
+- Langchain (python) - The library for that will consume files
+- Chroma (python) - We use this as a Vector database store with the data we will parse from OpenAI (document files)
+- Erlang/Elixir - The system will mainly run on this
+
