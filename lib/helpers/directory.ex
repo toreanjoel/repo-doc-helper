@@ -38,12 +38,13 @@ defmodule Helpers.Directory do
     IO.inspect("Get relevant project repo cloned")
     Helpers.Git.clone_repo(System.get_env("REPO_URL"), get_repo_dir())
 
-    # Remove the assets and .git files as we wont be committing
-    System.cmd("sh", ["-c", "cd #{get_cloned_repo_dir()} && rm -r .git && rm -r .gitbook"])
-
     # setup file to has logs to
     IO.inspect("Store last commit hash for reference")
     Helpers.Git.persist_latest_commit()
+
+    # Remove the assets and .git files as we wont be committing
+    # TODO: This causds slow or race conditions writing wrong data to file
+    System.cmd("sh", ["-c", "cd #{get_cloned_repo_dir()} && rm -r .git && rm -r .gitbook"])
 
     # here we run the function to setup all md files
     # NOTE: I pass the path as this is used recursively so makes sense to
@@ -55,6 +56,9 @@ defmodule Helpers.Directory do
     # TODO: Check if we need to change this later to support other types?
     IO.inspect("Removing non markdown files as only .md is relevant in this case")
     md_filter()
+
+    # the end of the init execution - success or fail
+    IO.inspect("Init execution end")
   end
 
   @doc """
@@ -69,7 +73,6 @@ defmodule Helpers.Directory do
         flatten_dir(full_path)
         File.rm_rf!(full_path)
       else
-        # TODO: we need to check that its a md file
         File.rename!(full_path, get_cloned_repo_dir() <> "/#{file_or_dir}")
       end
     end)

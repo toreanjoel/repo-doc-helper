@@ -16,7 +16,8 @@ defmodule RepoDocHelper.Supervisors.PollRepo do
       |> Map.put(:job_count, 0)
       |> Map.put(:repo_ready, File.dir?(Helpers.Directory.get_cloned_repo_dir()))
 
-    process_job(new_state)
+    # process_job(new_state)
+    Process.send(self(), :work, [])
     {:ok, new_state}
   end
 
@@ -38,11 +39,7 @@ defmodule RepoDocHelper.Supervisors.PollRepo do
   defp process_job(state) do
     %{ :interval => interval } = state
     interval_int = String.to_integer(interval)
-    if state.repo_ready do
-      Process.send_after(self(), :work, interval_int*1000)
-    else
-      Process.send(self(), :work, [])
-    end
+    Process.send_after(self(), :work, interval_int*1000)
     {:ok, :noreply}
   end
 
@@ -55,9 +52,6 @@ defmodule RepoDocHelper.Supervisors.PollRepo do
       IO.inspect("No change require, currently on latest")
     end
 
-    # we do a check here after running the job to make sure there is data
-    new_state = state
-      |> Map.put(:repo_ready, File.dir?(Helpers.Directory.get_cloned_repo_dir()) )
-    {:ok, new_state}
+    {:ok, state}
   end
 end
