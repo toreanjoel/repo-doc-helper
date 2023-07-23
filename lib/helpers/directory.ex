@@ -44,18 +44,18 @@ defmodule Helpers.Directory do
 
     # Remove the assets and .git files as we wont be committing
     # TODO: This causds slow or race conditions writing wrong data to file
-    System.cmd("sh", ["-c", "cd #{get_cloned_repo_dir()} && rm -r .git && rm -r .gitbook"])
+    System.cmd("sh", ["-c", "cd #{get_cloned_repo_dir()} && rm -r .gitbook"])
 
     # here we run the function to setup all md files
     # NOTE: I pass the path as this is used recursively so makes sense to
     # dont need to check if passed or have fallbacks
     IO.inspect("Flatten the directory to remove nested folders")
-    flatten_dir(get_cloned_repo_dir())
+    # flatten_dir(get_cloned_repo_dir())
 
     # Remove non .md files
     # TODO: Check if we need to change this later to support other types?
     IO.inspect("Removing non markdown files as only .md is relevant in this case")
-    md_filter()
+    # md_filter()
 
     # the end of the init execution - success or fail
     IO.inspect("Init execution end")
@@ -65,6 +65,7 @@ defmodule Helpers.Directory do
     Flatten the entire project structure so we can have one directory with the data
   """
   def flatten_dir(path) do
+    # TODO: Dont do anything to the .git files - this moves or removes and log for remote wont work
     File.ls!(path)
     |> Enum.each(fn file_or_dir ->
       full_path = Path.join(path, file_or_dir)
