@@ -7,8 +7,6 @@ defmodule RepoDocHelper.Application do
 
   @impl true
   def start(_type, _args) do
-    # startup functions
-    Helpers.Directory.init_data()
 
     children = [
       # Start the Telemetry supervisor
@@ -20,7 +18,7 @@ defmodule RepoDocHelper.Application do
       # Start a worker by calling: RepoDocHelper.Worker.start_link(arg)
       # {RepoDocHelper.Worker, arg}
       # CUSTOM PROCESSES
-      {RepoDocHelper.Supervisors.RepoFetch,
+      {RepoDocHelper.Supervisors.PollRepo,
         %{
           :interval => System.get_env("REPO_FETCH_INTERVAL"),
           :repo => System.get_env("REPO_URL")

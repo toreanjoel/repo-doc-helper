@@ -24,14 +24,28 @@ defmodule Helpers.Git do
     if we need to pull it down
   """
   def persist_latest_commit() do
-    logs =
-      log(Helpers.Directory.get_cloned_repo_dir)
-        |> String.split("\n")
-        |> Enum.at(0) # gets the commit indice
-        |> String.split(" ") # remove the string "commit"
-        |> Enum.at(1) # we get the commit hash only
-
     # write logs to a file, we can hash the files?
-    File.write(Helpers.Directory.get_repo_dir() <> "/latest_commit.txt", logs)
+    File.write(Helpers.Directory.get_repo_dir() <> "/latest_commit.txt", get_latest_commit())
+  end
+
+  @doc """
+    Get the latest commit hash for a repo
+  """
+  def get_latest_commit() do
+    log(Helpers.Directory.get_cloned_repo_dir)
+      |> String.split("\n")
+      |> Enum.at(0) # gets the commit indice
+      |> String.split(" ") # remove the string "commit"
+      |> Enum.at(1) # we get the commit hash only
+  end
+
+  @doc """
+    Get the local commit hash for a repo
+  """
+  def get_local_commit() do
+    case File.read(Helpers.Directory.get_repo_dir() <> "/latest_commit.txt") do
+      {:ok, data} -> data
+      _ -> {:error, "There was an error getting the local hash"}
+    end
   end
 end
