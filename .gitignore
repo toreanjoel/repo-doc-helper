@@ -39,5 +39,6 @@ npm-debug.log
 .envrc
 
 # repo directory where the files will be made
-REPO
+_DOCUMENTS
+_MODEL_DATA
 
