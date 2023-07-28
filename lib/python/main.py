@@ -26,7 +26,7 @@ if __name__ == '__main__':
     # split the document into chunks
     # this means that its small enough so it loads in
     # splits by double and one line and space
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=100, chunk_overlap=50)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1200, chunk_overlap=0)
     texts = text_splitter.split_documents(document)
 
     # embeddings
@@ -41,7 +41,7 @@ if __name__ == '__main__':
     store = Chroma.from_documents(texts, embeddings, collection_name="langchain-read-doc")
     # query
     # setup open ai then use the LLM and use Retrieval QA to perform data retrieval on the stored data
-    llm = OpenAI(temperature=1)
+    llm = OpenAI(temperature=0.3)
     chain = RetrievalQA.from_chain_type(llm, retriever=store.as_retriever())
     # print(input, end="")
     print(chain.run(input), end="")
