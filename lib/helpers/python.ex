@@ -1,17 +1,19 @@
 defmodule Helpers.Python do
   @moduledoc """
     The python helper methods to interact with the system assigned python scripts
+    Note: The python was setup to execute through python3, this can be set differently
   """
 
   # the path to the python scripts
   @main_py_path File.cwd! <> "/lib/python"
   @python3 "python3" # python cmd function - might need fiddling as its per env
+  @script "main"
 
   @doc """
     Execute a script by passing the script name along with list of args
   """
-  def execute(script, query) do
-    {result, _} = System.cmd(@python3, [@main_py_path <> "/#{script}.py" | [query, System.get_env("OPEN_AI_KEY")]])
+  def execute(query) do
+    {result, _} = System.cmd(@python3, [@main_py_path <> "/#{@script}.py" | [query, System.get_env("OPEN_AI_KEY")]])
     resp = case result do
       "" -> "Something went wrong, make sure the model dataset exists and can be run against"
       _ -> result |> String.trim()

@@ -1,5 +1,6 @@
 defmodule RepoDocHelperWeb.Router do
   use RepoDocHelperWeb, :router
+  alias RepoDocHelperWeb.Api.QueryController, as: QueryController
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -18,6 +19,13 @@ defmodule RepoDocHelperWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+  end
+
+  # The API routes to query functions and data against the AI and the dataset initializex
+  scope "/api" do
+    post "/initialize", QueryController, :init_data
+    post "/query", QueryController, :query
+    get "/status", QueryController, :status
   end
 
   # Other scopes may use custom stacks.

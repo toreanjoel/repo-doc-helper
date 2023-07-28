@@ -1,6 +1,7 @@
 defmodule Helpers.Git do
   @moduledoc """
     Helper functions for git, assuming its installed on the machine
+    We use shell commands to execute an instance to run
   """
 
   @doc """
@@ -25,6 +26,7 @@ defmodule Helpers.Git do
   """
   def persist_latest_commit() do
     # write logs to a file, we can hash the files?
+    # create the file if needed
     File.write(Helpers.Directory.get_repo_dir() <> "/latest_commit.txt", get_latest_commit())
   end
 

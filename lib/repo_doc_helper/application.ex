@@ -14,16 +14,7 @@ defmodule RepoDocHelper.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: RepoDocHelper.PubSub},
       # Start the Endpoint (http/https)
-      RepoDocHelperWeb.Endpoint,
-      # Start a worker by calling: RepoDocHelper.Worker.start_link(arg)
-      # {RepoDocHelper.Worker, arg}
-      # CUSTOM PROCESSES
-      {RepoDocHelper.Supervisors.PollRepo,
-        %{
-          :interval => System.get_env("REPO_FETCH_INTERVAL"),
-          :repo => System.get_env("REPO_URL")
-        }
-      }
+      RepoDocHelperWeb.Endpoint
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
@@ -31,6 +22,9 @@ defmodule RepoDocHelper.Application do
     opts = [strategy: :one_for_one, name: RepoDocHelper.Supervisor]
     Supervisor.start_link(children, opts)
   end
+
+  # This needs to be done first, if there is no data we dont allow execution and let user know
+  IO.inspect("We need to call the route to init the data before anything can be done")
 
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.

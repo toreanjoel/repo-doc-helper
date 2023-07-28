@@ -35,25 +35,20 @@ defmodule Helpers.Directory do
   @doc """
     Check if the needed directory exists, initialize
   """
+  # TODO: Error cases here to manage incase things break along the way
   def init_data() do
-    IO.inspect("Prepare directory creation")
     if !File.dir?(get_repo_dir()) do
       File.mkdir(get_repo_dir())
     end
 
     # we try add the repo after we know the file has been made
-    # TODO: Make sure the machine has git installed
     IO.inspect("Get relevant project repo cloned")
     Helpers.Git.clone_repo(System.get_env("REPO_URL"), get_repo_dir())
 
     # Remove the assets and .git files as we wont be committing
-    # TODO: This causds slow or race conditions writing wrong data to file
     System.cmd("sh", ["-c", "cd #{get_cloned_repo_dir()} && rm -r .gitbook"])
 
-    # here we run the function to setup all md files
-    # NOTE: I pass the path as this is used recursively so makes sense to
-    # dont need to check if passed or have fallbacks
-    IO.inspect("Flatten the directory to remove nested folders")
+    # Walk and recursively flatten the .md docs
     flatten_dir(get_cloned_repo_dir())
 
     # Remove non .md files
@@ -64,13 +59,7 @@ defmodule Helpers.Directory do
     # Generate model data doc
     generate_model_doc()
 
-    # TODO: Vectorize the data and store
-    # TODO: OPEN AI w/ Python and langchain
-    # TODO: Docs around external db, nx for vectors in elixir, custom LLM save costs, split sections and not 1 doc
-    # TODO: API
-    # TODO: Python helpers to call
-    # TODO: Docker setup and install
-    # TODO: API to get status of a app pulling, removing of repo etc (setup data)
+    {:ok, "Initialize data attempt comepleted"}
   end
 
   @doc """

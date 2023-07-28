@@ -5,18 +5,18 @@
       Source control documentation /w AI
     </p>
     <p class="mt-4 text-base leading-7 text-zinc-600">
-      LLM to read and help assist navigation through open-source (Gitbook) documentation.
-      Just set config to point to a public repo, we will get all the relevant .md files and create
-      vector database for an LLM for you to ask information on.
-    </p>
-    <p class="mt-4 text-base leading-7 text-zinc-600">
-      <li>Show local vs remote hashes</li>
-      <li>Document files (.md)</li>
-      <li>Link to the project</li>
-      <li>Delete the REPO</li>
-      <li>Add custom link to project</li>
-      <li>Refresh - init the document data</li>
-      <li>Input to interact with the bot?</li>
+      Gnereate document query using AI from .md files in open Github repos.
+      Requires setup of OpenAI tokens and has endpoints that you can call to query as well intialize data for query.
+      <br />
+      <br />
+      <b>Repo:</b> <%= System.get_env("REPO_URL") %>
+      <br />
+      <br />
+      [POST] <b>/api/initialize:</b> Pulls and gets all the relevant files and generates 1 file to be used as a loader to query against for an LLM
+      <br />
+      [GET] <b>/api/status:</b> Check the existence of the relavant dataset files and directories to help decide if an initialize needs to be run
+      <br />
+      [POST] <b>/api/query:</b> Ask an LLM (OpenAI at the moment w/ LangChain) to query against the document generated as its context (the generated through public repo)
     </p>
   </div>
 </div>
