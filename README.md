@@ -76,6 +76,5 @@ We also have errors if the directories and files do not exist with error codes `
 - Make smaller files as this can result in one large file, slow response times from the LLM needing
 - Executing Pyhton through Elixir relying on system commands is not ideal, separate process execution of python files would be better
 - Packing and hosting as a Docker container might make this easier to use down the line for others to self host
-- UI? (not important but it could help using the UI to have the user query out the box and not need to request against encpoints)
 - Logging and error gaurds - this can be cleaned up and more can be added
 - Tests would help at the end of all the cleanup and optimization to make sure the code works as expected
